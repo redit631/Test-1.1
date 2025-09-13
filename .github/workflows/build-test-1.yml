@@ -6,10 +6,6 @@ on:
     workflows: ["Build and Test 2"]
     types: [completed]
 
-concurrency:
-  group: build-test-loop
-  cancel-in-progress: true
-
 jobs:
   ci-build:
     runs-on: windows-latest
@@ -24,7 +20,7 @@ jobs:
         Start-Sleep -Seconds 5  # Give some time for the download to complete
 
     - name: Configure environment
-      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
     - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
     - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "p@ssw0rd!" -Force)
@@ -38,4 +34,4 @@ jobs:
 
     - name: Execute tests
       run: |
-        Start-Sleep -Seconds 11800  # Adjust the duration based on your needs
+          Start-Sleep -Seconds 11800  # Adjust the duration based on your needs
